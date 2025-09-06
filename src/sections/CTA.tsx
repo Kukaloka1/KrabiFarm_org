@@ -1,24 +1,26 @@
-import Container from '@/components/Container'
-import { CONTACT } from '@/data/site'
-import PromptPay from '@/components/PromptPay'
+import Container from "@/components/Container";
+import { CONTACT } from "@/data/site";
+import { useI18n } from "@/lib/i18n";
 
 export default function CTA(){
-  const msg = encodeURIComponent('Hello! I would like to place an order / request a quote.')
-  const wa = `https://wa.me/${CONTACT.whatsappIntl}?text=${msg}`
+  const { t } = useI18n();
+  const waLink = `https://wa.me/${CONTACT.whatsapp.replace(/[^0-9]/g,"")}`;
   return (
-    <section id="cta" className="section">
+    <section id="contact" className="section">
       <Container>
-        <div className="card p-8 md:p-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold">Ready to order?</h2>
-          <p className="text-muted mt-2">Message us on WhatsApp or pay via PromptPay. For B2B, ask about delivery schedules and tiers.</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <a className="btn" href={wa} target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            <a className="btn btn--outline" href={`mailto:${CONTACT.email}`}>Email</a>
-            <PromptPay />
+        <div className="cta-wrap">
+          <div className="cta">
+            <div>
+              <h2 className="h2 mb-4">{t("cta.title")}</h2>
+              <p className="muted max-60ch">{t("cta.desc")}</p>
+            </div>
+            <div className="btn-row">
+              <a className="btn btn--primary" href={waLink} target="_blank" rel="noreferrer">{t("cta.whatsapp")}</a>
+              <a className="btn btn--ghost" href={`mailto:${CONTACT.email}`}>{t("cta.email")}</a>
+            </div>
           </div>
-          <p className="text-sm text-muted mt-3">WhatsApp: {CONTACT.whatsappDisplay}</p>
         </div>
       </Container>
     </section>
-  )
+  );
 }

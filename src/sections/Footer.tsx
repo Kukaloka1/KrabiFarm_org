@@ -1,1 +1,7 @@
-export default function Footer(){ return <footer className="py-10 border-t border-black/10"><div className="container-xl text-sm text-gray-500 dark:text-gray-400">© KrabiFarm. All rights reserved.</div></footer> }
+export default function Footer(){
+  return (
+    <footer className="footer">
+      © {new Date().getFullYear()} KrabiFarm — Independent civic-tech initiative.
+    </footer>
+  );
+}
