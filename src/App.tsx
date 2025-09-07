@@ -6,7 +6,7 @@ import ProblemSolution from "@/sections/ProblemSolution";
 import Solution from "@/sections/Solution";
 import Impact from "@/sections/Impact";
 import TheTeam from "@/sections/TheTeam";
-import CTA from "@/sections/CTA";
+import Contact from "@/sections/Contact";
 import Footer from "@/sections/Footer";
 
 export default function App(){
@@ -24,7 +24,7 @@ export default function App(){
         <Solution />
         <Impact />
         <TheTeam />
-        <CTA />
+        <Contact /> 
       </main>
       <Footer />
     </>

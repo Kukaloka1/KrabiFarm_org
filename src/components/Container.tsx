@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
-export default function Container({children, className=''}:{children:ReactNode; className?:string}){
-  return <div className={`container-xl ${className}`}>{children}</div>
+export default function Container({ children }: { children: React.ReactNode }) {
+  return <div className="max-w-[1200px] mx-auto px-4">{children}</div>;
 }
