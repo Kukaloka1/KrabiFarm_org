@@ -68,3 +68,7 @@ pre {
 
 /* Opcional: Estabiliza la barra vertical para evitar saltos de 100vw */
 html { scrollbar-gutter: stable both-edges; }
+
+/* ——— PRIORIDAD A LAS UTILIDADES DE TAILWIND EN MEDIA COVER ——— */
+img.h-full { height: 100% !important; }
+img.w-full { width: 100% !important; }

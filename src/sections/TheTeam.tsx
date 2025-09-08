@@ -22,14 +22,32 @@ type Member = {
   descKey: string;   // i18n: team.desc.<roleKey>
   photo?: string;
   fruit: string;     // svg decorativo
+  imgPos?: string;   // e.g. "object-[50%_45%]" fuerza foco vertical
 };
 
-/* ───────── Data (Team) ───────── */
+/* ───────── Data (Team) ─────────
+   Nota: forzamos el foco vertical ~45% para que la cara quede centrada
+   en Somchai y Antonio en TODOS los breakpoints.
+---------------------------------------------------------------- */
 const TEAM: Member[] = [
-  { name: "Somchai",                 roleKey: "leader",     descKey: "leader",     fruit: fr1, photo: somchai },
-  { name: "Antonio Ríos",  roleKey: "architect",  descKey: "architect",  fruit: fr2, photo: antonio },
-  { name: "Natty",                   roleKey: "ops",        descKey: "ops",        fruit: fr3, photo: natty },
-  { name: "Tety",                    roleKey: "logistics",  descKey: "logistics",  fruit: fr4, photo: tety },
+  {
+    name: "Somchai",
+    roleKey: "leader",
+    descKey: "leader",
+    fruit: fr1,
+    photo: somchai,
+    imgPos: "object-[50%_44%]" // centra un poco más hacia abajo
+  },
+  {
+    name: "Antonio Ríos",
+    roleKey: "architect",
+    descKey: "architect",
+    fruit: fr2,
+    photo: antonio,
+    imgPos: "object-[50%_46%]" // similar, un pelín más
+  },
+  { name: "Natty", roleKey: "ops", descKey: "ops", fruit: fr3, photo: natty },
+  { name: "Tety",  roleKey: "logistics", descKey: "logistics", fruit: fr4, photo: tety },
 ];
 
 /* ───────── Utils ───────── */
@@ -69,12 +87,13 @@ export default function Team(){
               data-aos-delay={80 + i*100}
             >
               <div className="relative rounded-[20px] border border-black/10 bg-white p-6 shadow-md hover:shadow-xl transition-transform hover:-translate-y-0.5">
+                {/* Foto 4/3 con cover + foco controlado */}
                 <div className="relative rounded-xl overflow-hidden bg-slate-100 aspect-[4/3] mb-4">
                   {m.photo ? (
                     <img
                       src={m.photo}
                       alt={m.name}
-                      className="absolute inset-0 w-full h-full object-cover object-center"
+                      className={`absolute inset-0 w-full h-full object-cover ${m.imgPos ?? "object-center"}`}
                     />
                   ) : (
                     <div className="absolute inset-0 w-full h-full grid place-items-center">
@@ -85,6 +104,7 @@ export default function Team(){
                   )}
                 </div>
 
+                {/* Nombre + fruta */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="font-bold text-lg text-slate-900 leading-tight">{m.name}</h3>
                   <img
@@ -95,6 +115,7 @@ export default function Team(){
                   />
                 </div>
 
+                {/* Rol y descripción */}
                 <p className="text-blue-600 font-semibold">{t(`team.role.${m.roleKey}`)}</p>
                 <p className="text-slate-600 text-sm mt-2">{t(`team.desc.${m.descKey}`)}</p>
               </div>
