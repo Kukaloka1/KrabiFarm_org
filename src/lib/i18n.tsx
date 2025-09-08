@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, { createContext, useContext, useMemo, useEffect } from 'react'
 
 /* ──────────────────────────────────────────────────────────────
  * i18n — Proveedor minimalista (EN/TH)
@@ -262,14 +262,56 @@ const I18nCtx = createContext<I18nValue>({
   t: (k) => k
 })
 
-/** ───────── Proveedor ───────── */
+/** ───────── Proveedor ─────────
+ * URL limpia en home: sin ?lang ni #top
+ * - Lee primero localStorage
+ * - Si llega ?lang= lo aplica una vez, lo guarda y limpia la URL
+ * - Fallback por idioma del navegador
+ */
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const url = new URL(window.location.href)
-  const q = (url.searchParams.get('lang') || 'en').toLowerCase() as Lang
-  const lang: Lang = q === 'th' ? 'th' : 'en'
-  const dict = messages[lang]
-  const t = useMemo(() => (key: string) => dict[key] ?? key, [dict])
-  const value = useMemo<I18nValue>(() => ({ lang, t }), [lang, t])
+  const STORAGE_KEY = "kf_lang";
+
+  const url = new URL(window.location.href);
+  const fromQuery = (url.searchParams.get("lang") || "").toLowerCase();
+  const fromStorage = (localStorage.getItem(STORAGE_KEY) || "").toLowerCase();
+
+  let lang: Lang =
+    (fromQuery === "en" || fromQuery === "th")
+      ? (fromQuery as Lang)
+      : (fromStorage === "en" || fromStorage === "th")
+        ? (fromStorage as Lang)
+        : (navigator.language.toLowerCase().startsWith("th") ? "th" : "en");
+
+  // Persiste si vino por query; o inicializa si no existe en storage
+  if (fromQuery === "en" || fromQuery === "th") {
+    localStorage.setItem(STORAGE_KEY, lang);
+  } else if (!fromStorage) {
+    localStorage.setItem(STORAGE_KEY, lang);
+  }
+
+  // Limpia ?lang y #top de la URL (home limpio)
+  useEffect(() => {
+    const u = new URL(window.location.href);
+    let dirty = false;
+    if (u.searchParams.has("lang")) {
+      u.searchParams.delete("lang");
+      dirty = true;
+    }
+    if (u.hash === "#top") {
+      u.hash = "";
+      dirty = true;
+    }
+    if (dirty) {
+      const qs = u.searchParams.toString();
+      const clean = u.pathname + (qs ? `?${qs}` : "") + u.hash;
+      window.history.replaceState({}, "", clean || "/");
+    }
+  }, []);
+
+  const dict = messages[lang];
+  const t = useMemo(() => (key: string) => dict[key] ?? key, [dict]);
+  const value = useMemo<I18nValue>(() => ({ lang, t }), [lang, t]);
+
   return <I18nCtx.Provider value={value}>{children}</I18nCtx.Provider>
 }
 

@@ -12,6 +12,8 @@ const NAV = [
   { href: "#contact", key: "nav.contact" }
 ];
 
+const LANG_STORAGE_KEY = "kf_lang";
+
 export default function Header(){
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
@@ -19,15 +21,50 @@ export default function Header(){
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll(); // estado correcto al cargar
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const setLang = (lang: "en" | "th") => {
+  // Limpia ?lang y #top del HOME en el primer render
+  useEffect(() => {
     const url = new URL(window.location.href);
-    url.searchParams.set("lang", lang);
-    window.location.href = url.toString();
+    const hadLang = url.searchParams.has("lang");
+    const isTop = url.hash === "#top";
+
+    if (hadLang) url.searchParams.delete("lang");
+    if (isTop) url.hash = "";
+
+    if (hadLang || isTop) {
+      const qs = url.searchParams.toString();
+      const clean = url.pathname + (qs ? `?${qs}` : "") + url.hash;
+      window.history.replaceState({}, "", clean || "/");
+    }
+  }, []);
+
+  const setLang = (lang: "en" | "th") => {
+    // Guardar preferencia limpia (sin ?lang)
+    localStorage.setItem(LANG_STORAGE_KEY, lang);
+
+    // Quitar cualquier rastro de ?lang y #top de la URL actual
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("lang")) url.searchParams.delete("lang");
+    if (url.hash === "#top") url.hash = "";
+
+    const qs = url.searchParams.toString();
+    const clean = url.pathname + (qs ? `?${qs}` : "") + url.hash;
+
+    // Recargar para que I18nProvider tome el cambio (si tu provider no soporta hot switch)
+    window.location.href = clean || "/";
+  };
+
+  const goHomeClean = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    window.history.replaceState({}, "", url.pathname || "/");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const LangSwitcher = useMemo(()=>(
@@ -60,7 +97,8 @@ export default function Header(){
       <nav className="py-2.5 md:py-3">
         <Container>
           <div className="flex items-center justify-between">
-            <a href="#top" className="font-black tracking-tight text-slate-900 text-lg md:text-xl">
+            {/* Logo/Home limpio (sin #top ni ?lang) */}
+            <a href="/" onClick={goHomeClean} className="font-black tracking-tight text-slate-900 text-lg md:text-xl">
               KrabiFarm
             </a>
 
