@@ -1,5 +1,5 @@
 export const CONTACT = {
-  email: "hello@krabifarm.org",
-  whatsapp: "+66900000000", // TODO: reemplazar
+  email: "networkbittech@gmail.com",
+  whatsapp: "+66656328895", // TODO: reemplazar
   instagram: "krabifarm"
 };

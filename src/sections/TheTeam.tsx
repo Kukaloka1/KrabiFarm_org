@@ -8,11 +8,9 @@ import fr1 from "@/assets/fr1.svg";
 import fr2 from "@/assets/fr2.svg";
 import fr3 from "@/assets/fr3.svg";
 import fr4 from "@/assets/fr4.svg";
-import fr5 from "@/assets/fr5.svg";
-import fr6 from "@/assets/fr6.svg";
 
 /* ───────── Fotos reales: todas en .jpeg ─────── */
-import somchai from "@/assets/team/some.jpeg";
+import somchai from "@/assets/team/some2.jpeg";
 import antonio from "@/assets/team/anto.jpeg";
 import tety from "@/assets/team/tety.jpeg";
 import natty from "@/assets/team/natty.jpeg";
@@ -26,16 +24,12 @@ type Member = {
   fruit: string;     // svg decorativo
 };
 
-/* ───────── Data (Team) ─────────
-   Nota: fotos activadas (formato .jpeg) y svg asignado a cada uno.
----------------------------------------------------------------- */
+/* ───────── Data (Team) ───────── */
 const TEAM: Member[] = [
   { name: "Somchai",                 roleKey: "leader",     descKey: "leader",     fruit: fr1, photo: somchai },
-  { name: "Antonio Fernández Ríos",  roleKey: "architect",  descKey: "architect",  fruit: fr2, photo: antonio },
+  { name: "Antonio Ríos",  roleKey: "architect",  descKey: "architect",  fruit: fr2, photo: antonio },
   { name: "Natty",                   roleKey: "ops",        descKey: "ops",        fruit: fr3, photo: natty },
   { name: "Tety",                    roleKey: "logistics",  descKey: "logistics",  fruit: fr4, photo: tety },
-  { name: "Preecha",                 roleKey: "tech",       descKey: "tech",       fruit: fr5 },
-  { name: "Dao",                     roleKey: "community",  descKey: "community",  fruit: fr6 },
 ];
 
 /* ───────── Utils ───────── */
@@ -66,7 +60,7 @@ export default function Team(){
         </header>
 
         {/* Grid de tarjetas */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
           {TEAM.map((m, i)=>(
             <article
               key={m.name}
@@ -75,11 +69,6 @@ export default function Team(){
               data-aos-delay={80 + i*100}
             >
               <div className="relative rounded-[20px] border border-black/10 bg-white p-6 shadow-md hover:shadow-xl transition-transform hover:-translate-y-0.5">
-                
-                {/* Foto centrada o iniciales (placeholder)
-                   - Contenedor con relación 4/3
-                   - La imagen ocupa todo y se centra perfectamente
-                */}
                 <div className="relative rounded-xl overflow-hidden bg-slate-100 aspect-[4/3] mb-4">
                   {m.photo ? (
                     <img
@@ -96,7 +85,6 @@ export default function Team(){
                   )}
                 </div>
 
-                {/* Nombre + fruta (svg) alineados en línea, al final del nombre */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="font-bold text-lg text-slate-900 leading-tight">{m.name}</h3>
                   <img
@@ -107,7 +95,6 @@ export default function Team(){
                   />
                 </div>
 
-                {/* Rol y descripción */}
                 <p className="text-blue-600 font-semibold">{t(`team.role.${m.roleKey}`)}</p>
                 <p className="text-slate-600 text-sm mt-2">{t(`team.desc.${m.descKey}`)}</p>
               </div>

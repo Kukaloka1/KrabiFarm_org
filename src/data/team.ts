@@ -16,7 +16,7 @@ export const TEAM: TeamMember[] = [
   },
   {
     id: "antonio",
-    name: "Antonio Fernández Rios",
+    name: "Antonio Rios",
     role: "Tech Architect (Bittech Network)",
     bio: "Architect behind the platform’s product vision and technology: marketplace backbone, QR payments and traceability.",
     photo: "/placeholder.webp"

@@ -1,6 +1,6 @@
 import Container from "@/components/Container";
 import { useI18n } from "@/lib/i18n";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo1.png";
 
 export default function Footer(){
   const { t } = useI18n();
