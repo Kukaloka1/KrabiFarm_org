@@ -18,8 +18,53 @@
               Roboto,"Helvetica Neue", Arial,"Noto Sans","Liberation Sans",sans-serif;
 }
 
-html,body,#root{ height:100%; }
+/* ===== Reset clave para evitar overflow lateral ===== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body, #root{
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;     /* fallback */
+  overflow-x: clip;       /* moderno: evita scroll horizontal */
+  overscroll-behavior-x: none;
+}
+
 body{
+  margin: 0;
   background:#f5f7f4; color:#0b1220; font-family:var(--font-sans);
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
 }
+
+/* Recorta desbordes típicos de badges/animaciones dentro de secciones */
+main, section, header, footer, nav {
+  overflow-x: clip; /* no muestra nada que se salga por X */
+}
+
+/* Flex/Grid: evita overflow por min-width:auto en hijos */
+:where(.flex, .grid) > * {
+  min-width: 0;
+}
+
+/* Medios nunca más anchos que su contenedor */
+img, svg, video, canvas, iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Palabras/URLs largas no empujan el layout */
+:where(p, h1, h2, h3, h4, h5, h6, a, span, li, code, pre){
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Pre formateado que no rompa el layout */
+pre {
+  white-space: pre-wrap;
+}
+
+/* Opcional: Estabiliza la barra vertical para evitar saltos de 100vw */
+html { scrollbar-gutter: stable both-edges; }
